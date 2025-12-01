@@ -14,11 +14,11 @@ public class Main {
     public static void main(String[] args) {
 
         System.out.println("=================================================");
-        System.out.println("🤖 Лабораторна робота 4: Ігрова Кімната");
+        System.out.println(" Лабораторна робота 4: Ігрова Кімната");
         System.out.println("=================================================");
 
         // --- 1. Ініціалізація Системи ---
-        // Виділяємо бюджет 3000 UAH і цільову кількість іграшок - 15
+
         ToyRoom room = new ToyRoom(3000.0, 15);
 
 
