@@ -73,6 +73,34 @@ public class Main {
         System.out.println(validation);
 
         System.out.println("\n=================================================");
-        System.out.println("🎉 Програма завершена успішно!");
+        System.out.println(" Програма завершена успішно!");
+        /*
+        // --- 1. Ініціалізація Системи ---
+        // Створюємо об'єкти, які будуть виконувати реальні операції .
+        ToyRoom room = new ToyRoom(3000.0, 15);
+        InMemoryToyRepository repository = new InMemoryToyRepository();
+        RoomServiceImpl roomService = new RoomServiceImpl(repository);
+
+        // --- 2. Ініціалізація Меню  ---
+        Menu consoleMenu = new Menu();
+
+        // --- 3. Додавання Команд ---
+        // Створюємо та додаємо об'єкти-команди  до меню.
+        // Вони інкапсулюють логіку виклику методів service та room.
+
+        // Команда 1: Сформувати Кімнату
+        consoleMenu.addCommand(new PopulateRoomCommand(roomService, room));
+
+        // Команда 2: Сортування
+        // Тут треба буде передати service та room, коли буде реалізовано вибір параметра сортування
+        consoleMenu.addCommand(new SortToysCommand(roomService, room));
+
+        // Команда 3: Пошук
+        // Тут треба буде передати service та room, коли буде реалізовано вибір діапазону
+        consoleMenu.addCommand(new FindToysCommand(roomService, room));
+
+        // --- 4. Запуск Консолі ---
+        consoleMenu.run();
+         */
     }
 }
