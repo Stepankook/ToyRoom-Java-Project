@@ -1,7 +1,10 @@
 package com.toyroom.service;
 
-import com.toyroom.domain.*;
-import com.toyroom.repo.ToyRepository;
+import com.toyroom.domain.Size;
+import com.toyroom.domain.SortParam;
+import com.toyroom.domain.Toy;
+import com.toyroom.domain.ToyRoom;
+import com.toyroom.domain.repo.ToyRepository;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -13,44 +16,38 @@ public final class RoomServiceImpl implements RoomService {
 
     private final ToyRepository repository;
 
-
     public RoomServiceImpl(ToyRepository repository) {
         this.repository = repository;
     }
 
-
     @Override
     public void autoPopulate(ToyRoom room) {
         List<Toy> availableToys = repository.listAll();
-
-
         room.clearToys();
 
         ThreadLocalRandom random = ThreadLocalRandom.current();
 
         for (int i = 0; i < room.getTargetCount(); i++) {
             if (room.remainingBudget() <= 0) break;
+            if (availableToys.isEmpty()) break; // Захист від порожнього репозиторію
+
             Toy toyToAdd = availableToys.get(random.nextInt(availableToys.size()));
 
             if (toyToAdd.getPrice() <= room.remainingBudget()) {
-
                 room.addToy(toyToAdd);
             }
         }
     }
 
-    // --- ФВ2: sortBy (Сортування) ---
     @Override
     public void sortBy(ToyRoom room, SortParam param) {
         Comparator<Toy> comparator;
-
 
         switch (param) {
             case PRICE:
                 comparator = Comparator.comparing(Toy::getPrice);
                 break;
             case SIZE:
-
                 comparator = Comparator.comparing(Toy::getSize);
                 break;
             case AGE_MIN:
@@ -63,19 +60,11 @@ public final class RoomServiceImpl implements RoomService {
                 throw new IllegalArgumentException("Unknown sort parameter: " + param);
         }
 
-
-
-        System.out.println("Sorting (Note: ToyRoom internal list should be sortable):");
         List<Toy> sortedToys = new ArrayList<>(room.getToys());
         sortedToys.sort(comparator);
-
-
         sortedToys.forEach(System.out::println);
-
     }
 
-
-    // --- ФВ3: findByPriceRange (Пошук за Ціною) ---
     @Override
     public List<Toy> findByPriceRange(ToyRoom room, double min, double max) {
         return room.getToys().stream()
@@ -83,10 +72,8 @@ public final class RoomServiceImpl implements RoomService {
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    // --- ФВ3: findBySizeRange (Пошук за Розміром) ---
     @Override
     public List<Toy> findBySizeRange(ToyRoom room, Size from, Size to) {
-
         int fromOrdinal = from.ordinal();
         int toOrdinal = to.ordinal();
 
@@ -95,16 +82,13 @@ public final class RoomServiceImpl implements RoomService {
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    // --- ФВ3: findByAgeRange (Пошук за Віком) ---
     @Override
     public List<Toy> findByAgeRange(ToyRoom room, int minAge, int maxAge) {
-
         return room.getToys().stream()
                 .filter(t -> t.getMinAge() <= maxAge && t.getMaxAge() >= minAge)
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    // --- Валідація ---
     @Override
     public ValidationResult validateRoom(ToyRoom room) {
         List<String> errors = new ArrayList<>();
@@ -119,13 +103,6 @@ public final class RoomServiceImpl implements RoomService {
                     room.getToys().size(), room.getTargetCount()));
         }
 
-
-
-        if (errors.isEmpty()) {
-            return ValidationResult.ok();
-        } else {
-            return ValidationResult.fail(errors);
-        }
+        return errors.isEmpty() ? ValidationResult.ok() : ValidationResult.fail(errors);
     }
-
 }

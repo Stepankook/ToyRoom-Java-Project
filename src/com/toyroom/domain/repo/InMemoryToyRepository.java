@@ -1,4 +1,4 @@
-package com.toyroom.repo;
+package com.toyroom.domain.repo;
 
 import com.toyroom.domain.*;
 
